@@ -32,3 +32,7 @@ Copy env-example.sh to example.sh and replace the configuration values. Then, be
 $ . env.sh
 $ ./tickets.sh
 ```
+
+## Hardware Build
+
+Coming Soon...
