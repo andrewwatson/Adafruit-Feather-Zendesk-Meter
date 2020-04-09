@@ -11,4 +11,24 @@ Then I realized I could query Zendesk to see how many unsolved tickets were assi
 
 ## Usage
 
+### Arduino Code
+
 To get this working for yourself just rename config-example.h and fill in the missing values for your Adafruit I/O credentials and your Wifi.
+
+```c
+#define IO_USERNAME  "YOUR USERNAME"
+#define IO_KEY       "YOUR TOKEN"
+
+#define WIFI_SSID "YOUR Wifi SSID"
+#define WIFI_PASS "YOUR WiFi Password"
+
+```
+
+### Shell Scripts
+
+Copy env-example.sh to example.sh and replace the configuration values. Then, before you run any of the shell scripts just source it into your environment.
+
+```sh
+$ . env.sh
+$ ./tickets.sh
+```
