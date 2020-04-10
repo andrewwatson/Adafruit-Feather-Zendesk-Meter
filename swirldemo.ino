@@ -25,6 +25,7 @@ uint8_t sweep[] = {1, 2, 3, 4, 6, 8, 10, 15, 20, 20, 80, 120, 120, 80, 20, 20, 1
 uint8_t currentMode = MODE_DARK;
 int loop_count = 0;
 unsigned long lastUpdate;
+uint8_t fill_level = 0;
 
 // set up the 'servo' feed
 AdafruitIO_Feed *commandfeed = io.feed("swisher");
@@ -62,7 +63,9 @@ void setup() {
   
   pinMode(STATUS_LED, OUTPUT);
 
-  flashLED(STATUS_LED);
+  fill(WING_HEIGHT, DEFAULT_BRIGHTNESS);
+  fill(0, DEFAULT_BRIGHTNESS);
+  
 }
 
 void loop() {
@@ -97,13 +100,24 @@ void handleMessage(AdafruitIO_Data *data) {
 }
 
 void fill(uint8_t lines, uint8_t brightness) {
-  ledmatrix.fillRect(0,0, WING_HEIGHT, WING_WIDTH, 0);
-  delay(10);
-  
-  for (uint8_t x = 0; x <= lines; x++) {
-    ledmatrix.fillRect(0, 0, x, WING_WIDTH, brightness);
-    delay(80);
+
+  if (lines < fill_level) {
+    Serial.printf("filling down from %d to %d\n", fill_level, lines);
+    for (int x = fill_level; x >= lines; x--) {
+      Serial.printf("x %d\n", x);
+      ledmatrix.fillRect(x, 0, WING_HEIGHT, WING_WIDTH, 0);
+//      ledmatrix.fillRect(0, 0, x, WING_WIDTH, brightness);
+      delay(50);
+    }    
+  } else {
+    Serial.printf("filling up from %d to %d\n", fill_level, lines);
+    for (int x = fill_level; x <= lines; x++) {
+      Serial.printf("x %d\n", x);
+      ledmatrix.fillRect(0, 0, x, WING_WIDTH, brightness);
+      delay(50);
+    }    
   }
+  fill_level = lines;  
 }
 
 void dark() {
